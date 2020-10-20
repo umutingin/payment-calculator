@@ -1,0 +1,93 @@
+<style>
+    .hesaplayici .center {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    select, #projeBedeli {
+        margin: auto;
+    }
+    .sonucText {
+        border: 1px solid #0000004d;
+        padding: 5px 10px;
+    }
+    .hesaplamaButonu {
+        text-align: center;
+    }
+    .hesaplamaButonu button {
+        margin: 0px;
+        width: 200px;
+    }
+    .sonuc {
+        margin-bottom: 0px;
+    }
+</style>
+
+<div class="hesaplayici">
+    <div class="column one center">
+       <h5>Toplam Yatırım Miktarı</h5>
+       <input type="number" name="projeBedeli" id="projeBedeli" step="any" />
+    </div>
+    <div class="column one center">
+       <h5>Peşinat Seç</h5>
+       <select name="pesinatYuzdesi" id="pesinatYuzdesi">
+          <option value="30">%30</option>
+          <option value="40">%40</option>
+          <option value="50">%50</option>
+       </select>
+    </div>
+    <div class="column one center">
+       <h5>Taksit Seç</h5>
+       <select name="taksitSayisi" id="taksitSayisi">
+          <option value="24">24</option>
+          <option value="36">36</option>
+          <option value="48">48</option>
+       </select>
+    </div>
+    <div class="column one hesaplamaButonu">
+       <p><button onclick="hesapla()">Hesapla</button></p>
+    </div>
+    <div class="column one sonuc">
+       <h5>SONUÇ</h5>
+       <p class="sonucText">Peşinat: <span id="sonucPesinat"></span></p>
+       <p class="sonucText">Taksit: <span id="sonucTaksit"></span></p>
+       <p class="sonucText">Aylık Ödeme Tutarı: <span id="sonucOdemeTutari"></span></p>
+       <p class="sonucText">Çalışma Bedeli: <span id="sonucCalismaBedeli"></span></p>
+       <p class="sonucText">Toplam Borç Tutarı: <span id="sonucToplamBorc"></span></p>
+       <p class="sonucText">Toplam Ödeme: <span id="sonucToplamOdeme"></span></p>
+    </div>
+</div>
+
+<script>
+   function hesapla() {
+      var calismaBedeliYuzdesi = {};
+      calismaBedeliYuzdesi["30"] = {};
+      calismaBedeliYuzdesi["30"]["48"] = 15;
+      calismaBedeliYuzdesi["30"]["36"] = 14;
+      calismaBedeliYuzdesi["30"]["24"] = 13;
+      calismaBedeliYuzdesi["40"] = {};
+      calismaBedeliYuzdesi["40"]["24"] = 12;
+      calismaBedeliYuzdesi["40"]["36"] = 13;
+      calismaBedeliYuzdesi["40"]["48"] = 14;
+      calismaBedeliYuzdesi["50"] = {};
+      calismaBedeliYuzdesi["50"]["24"] = 11;
+      calismaBedeliYuzdesi["50"]["36"] = 12;
+      calismaBedeliYuzdesi["50"]["48"] = 13;
+      var yuz = 100;
+      var projeBedeli = document.getElementById("projeBedeli").value;
+      var pesinatYuzdesi = document.getElementById("pesinatYuzdesi").value;
+      var taksitSayisi = document.getElementById("taksitSayisi").value;
+      var calismaOrani = calismaBedeliYuzdesi[pesinatYuzdesi][taksitSayisi];
+      var pesinat = projeBedeli * pesinatYuzdesi / yuz;
+      var pesindenKalan = projeBedeli - pesinat;
+      var odemeTutari = pesindenKalan / taksitSayisi;
+      var calismaBedeli = pesindenKalan * calismaOrani / yuz;
+      var toplamBorc = pesindenKalan + calismaBedeli;
+      var toplamOdeme = parseInt(projeBedeli) + parseInt(calismaBedeli);
+      document.getElementById("sonucPesinat").innerHTML = '$' + pesinat;
+      document.getElementById("sonucTaksit").innerHTML = taksitSayisi;
+      document.getElementById("sonucOdemeTutari").innerHTML = '$' + odemeTutari;
+      document.getElementById("sonucCalismaBedeli").innerHTML = '$' + calismaBedeli;
+      document.getElementById("sonucToplamBorc").innerHTML = '$' + toplamBorc;
+      document.getElementById("sonucToplamOdeme").innerHTML = '$' + toplamOdeme;
+   }
+</script>
